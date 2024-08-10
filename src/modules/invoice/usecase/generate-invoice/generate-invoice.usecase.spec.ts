@@ -1,17 +1,26 @@
+import InvoiceGateway from '../../gateway/invoice.gateway';
+import { CalculateTotalServiceInterface } from '../../service/calculate-total/calculate-total.service.interface';
 import GenerateInvoiceUseCase from './generate-invoice.usecase';
 
-const MockRepository = () => {
+const MockRepository = (): InvoiceGateway => {
   return {
-    generate: jest.fn(),
     find: jest.fn(),
+    generate: jest.fn(),
   };
 };
+
+const CalculateTotalService = (): CalculateTotalServiceInterface => {
+  return {
+    calculate: jest.fn().mockReturnValue(300),
+  };
+}
 
 describe(GenerateInvoiceUseCase.name, () => {
   describe(GenerateInvoiceUseCase.prototype.execute.name, () => {
     it('should generate an invoice', async () => {
       const invoiceRepository = MockRepository();
-      const usecase = new GenerateInvoiceUseCase(invoiceRepository);
+      const calculateTotalService = CalculateTotalService();
+      const usecase = new GenerateInvoiceUseCase(invoiceRepository, calculateTotalService);
   
       const input = {
         name: 'John Doe',

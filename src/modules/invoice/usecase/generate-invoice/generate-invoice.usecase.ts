@@ -2,14 +2,17 @@ import Id from '../../../@shared/domain/value-object/id.value-object';
 import InvoiceItem from '../../domain/invoice-item.entity';
 import Invoice from '../../domain/invoice.entity';
 import InvoiceGateway from '../../gateway/invoice.gateway';
+import { CalculateTotalServiceInterface } from '../../service/calculate-total/calculate-total.service.interface';
 import Address from '../../value-object/address';
 import { GenerateInvoiceInputDto, GenerateInvoiceOutputDto } from './generate-invoice.dto';
 
 export default class GenerateInvoiceUseCase {
   private _invoiceRepository: InvoiceGateway;
+  private _calculateTotalService: CalculateTotalServiceInterface;
 
-  constructor(_invoiceRepository: InvoiceGateway) {
-    this._invoiceRepository = _invoiceRepository;
+  constructor(invoiceRepository: InvoiceGateway, calculateTotalService: CalculateTotalServiceInterface) {
+    this._invoiceRepository = invoiceRepository;
+    this._calculateTotalService = calculateTotalService;
   }
 
   async execute(input: GenerateInvoiceInputDto): Promise<GenerateInvoiceOutputDto> {
@@ -49,7 +52,7 @@ export default class GenerateInvoiceUseCase {
         name: item.name,
         price: item.price,
       })),
-      total: invoice.items.reduce((acc, item) => acc + item.price, 0),
+      total: this._calculateTotalService.calculate(invoice.items),
     };
   }
 }
