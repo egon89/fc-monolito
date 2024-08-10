@@ -11,6 +11,8 @@ describe(InvoiceRepository.name, () => {
   let invoiceRepository: InvoiceRepository;
   let sequelize: Sequelize;
   const uuid = '8379a222-c251-4cd6-bf12-47d9737f8775';
+  const product1Id = 'a1624c89-c18a-4b99-9f7f-8bb0b8dc40c6';
+  const product2Id = 'c28002db-4c04-4f97-b762-8f672d9a65e0';
   const invoice = new Invoice({
     id: new Id(uuid),
     name: 'John Doe',
@@ -23,10 +25,12 @@ describe(InvoiceRepository.name, () => {
     }),
     items: [
       new InvoiceItem({
+        id: new Id(product1Id),
         name: 'Product 1',
         price: 100,
       }),
       new InvoiceItem({
+        id: new Id(product2Id),
         name: 'Product 2',
         price: 200,
       }),
@@ -68,8 +72,10 @@ describe(InvoiceRepository.name, () => {
       expect(result.zip).toEqual(invoice.address.zip);
       expect(result.city).toEqual(invoice.address.city);
       expect(result.items).toHaveLength(2);
+      expect(item1.id).toEqual(product1Id);
       expect(item1.name).toEqual(invoice.items[0].name);
       expect(item1.price).toEqual(invoice.items[0].price);
+      expect(item2.id).toEqual(product2Id);
       expect(item2.name).toEqual(invoice.items[1].name);
       expect(item2.price).toEqual(invoice.items[1].price);
     });
@@ -77,6 +83,7 @@ describe(InvoiceRepository.name, () => {
 
   describe(InvoiceRepository.prototype.find.name, () => {
     it('should find an invoice by id', async () => {
+      const now = new Date();
       await InvoiceModel.create({
         id: uuid,
         name: invoice.name,
@@ -85,17 +92,40 @@ describe(InvoiceRepository.name, () => {
         number: invoice.address.number,
         zip: invoice.address.zip,
         city: invoice.address.city,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
         items: invoice.items.map((item) => ({
+          id: item.id.id,
           name: item.name,
           price: item.price,
         })),
-      });
+      },
+      {
+        include: [InvoiceItemModel],
+      }
+    );
 
       const result = await invoiceRepository.find(uuid);
 
-      expect(result).toEqual(invoice);
+      expect(result.id.id).toEqual(uuid);
+      expect(result.name).toEqual(invoice.name);
+      expect(result.document).toEqual(invoice.document);
+      expect(result.address.street).toEqual(invoice.address.street);
+      expect(result.address.number).toEqual(invoice.address.number);
+      expect(result.address.zip).toEqual(invoice.address.zip);
+      expect(result.address.city).toEqual(invoice.address.city);
+      expect(result.items).toHaveLength(2);
+      expect(result.items[0].id.id).toEqual(product1Id);
+      expect(result.items[0].name).toEqual(invoice.items[0].name);
+      expect(result.items[0].price).toEqual(invoice.items[0].price);
+      expect(result.items[1].id.id).toEqual(product2Id);
+      expect(result.items[1].name).toEqual(invoice.items[1].name);
+      expect(result.items[1].price).toEqual(invoice.items[1].price);      
+    });
+
+    it('should throw an error when invoice is not found', async () => {
+      await expect(invoiceRepository.find(uuid)).rejects.toThrow(`Invoice with id ${uuid} not found`);
+    
     });
   });
 });

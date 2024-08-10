@@ -1,13 +1,62 @@
+import Id from '../../@shared/domain/value-object/id.value-object';
+import InvoiceItem from '../domain/invoice-item.entity';
 import Invoice from '../domain/invoice.entity';
 import InvoiceGateway from '../gateway/invoice.gateway';
+import Address from '../value-object/address';
+import InvoiceItemModel from './invoice-item.model';
+import { InvoiceModel } from './invoice.model';
 
 export default class InvoiceRepository implements InvoiceGateway {
   async generate(invoice: Invoice): Promise<void> {
-    // TODO: Implement the logic to generate an invoice
+    await InvoiceModel.create({
+      id: invoice.id.id,
+      name: invoice.name,
+      document: invoice.document,
+      street: invoice.address.street,
+      number: invoice.address.number,
+      zip: invoice.address.zip,
+      city: invoice.address.city,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      items: invoice.items.map((item) => new InvoiceItemModel({
+        id: item.id.id,
+        name: item.name,
+        price: item.price,
+        invoiceId: invoice.id.id,
+      })),
+    },
+    {
+      include: [InvoiceItemModel],
+    });
   }
 
   async find(id: string): Promise<Invoice> {
-    // TODO: Implement the logic to find an invoice
-    throw new Error("Method not implemented.");
+    const invoice = await InvoiceModel.findOne({
+      where: { id },
+      include: [InvoiceItemModel],
+    });
+
+    if (!invoice) {
+      throw new Error(`Invoice with id ${id} not found`);
+    }
+
+    return new Invoice({
+      id: new Id(invoice.id),
+      name: invoice.name,
+      document: invoice.document,
+      address: new Address({
+        street: invoice.street,
+        number: invoice.number,
+        zip: invoice.zip,
+        city: invoice.city,
+      }),
+      items: invoice.items.map((item) => new InvoiceItem({
+        id: new Id(item.id),
+        name: item.name,
+        price: item.price,
+      })),
+      createdAt: invoice.createdAt,
+      updatedAt: invoice.updatedAt,
+    });
   }
 } 
