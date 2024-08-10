@@ -20,8 +20,10 @@ describe(InvoiceRepository.name, () => {
     address: new Address({
       street: 'Main Street',
       number: 123,
+      complement: 'Apt 123',
       zip: '12345',
       city: 'New York',
+      state: 'NY',
     }),
     items: [
       new InvoiceItem({
@@ -69,8 +71,10 @@ describe(InvoiceRepository.name, () => {
       expect(result.document).toEqual(invoice.document);
       expect(result.street).toEqual(invoice.address.street);
       expect(result.number).toEqual(invoice.address.number);
+      expect(result.complement).toEqual(invoice.address.complement);
       expect(result.zip).toEqual(invoice.address.zip);
       expect(result.city).toEqual(invoice.address.city);
+      expect(result.state).toEqual(invoice.address.state);
       expect(result.items).toHaveLength(2);
       expect(item1.id).toEqual(product1Id);
       expect(item1.name).toEqual(invoice.items[0].name);
@@ -90,8 +94,10 @@ describe(InvoiceRepository.name, () => {
         document: invoice.document,
         street: invoice.address.street,
         number: invoice.address.number,
+        complement: invoice.address.complement,
         zip: invoice.address.zip,
         city: invoice.address.city,
+        state: invoice.address.state,
         createdAt: now,
         updatedAt: now,
         items: invoice.items.map((item) => ({
@@ -112,8 +118,10 @@ describe(InvoiceRepository.name, () => {
       expect(result.document).toEqual(invoice.document);
       expect(result.address.street).toEqual(invoice.address.street);
       expect(result.address.number).toEqual(invoice.address.number);
+      expect(result.address.complement).toEqual(invoice.address.complement);
       expect(result.address.zip).toEqual(invoice.address.zip);
       expect(result.address.city).toEqual(invoice.address.city);
+      expect(result.address.state).toEqual(invoice.address.state);
       expect(result.items).toHaveLength(2);
       expect(result.items[0].id.id).toEqual(product1Id);
       expect(result.items[0].name).toEqual(invoice.items[0].name);

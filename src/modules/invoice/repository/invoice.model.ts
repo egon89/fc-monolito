@@ -22,11 +22,17 @@ export class InvoiceModel extends Model {
   @Column({ allowNull: false })
   number: number;
 
+  @Column({ allowNull: true })
+  complement?: string;
+
   @Column({ allowNull: false })
   zip: string;
 
   @Column({ allowNull: false })
   city: string;
+
+  @Column({ allowNull: false })
+  state: string;
 
   @HasMany(() => InvoiceItemModel)
   items: InvoiceItemModel[]
