@@ -1,4 +1,5 @@
 import Id from '../../../@shared/domain/value-object/id.value-object';
+import UseCaseInterface from '../../../@shared/usecase/use-case.interface';
 import InvoiceItem from '../../domain/invoice-item.entity';
 import Invoice from '../../domain/invoice.entity';
 import InvoiceGateway from '../../gateway/invoice.gateway';
@@ -6,7 +7,7 @@ import { CalculateTotalServiceInterface } from '../../service/calculate-total/ca
 import Address from '../../value-object/address';
 import { GenerateInvoiceInputDto, GenerateInvoiceOutputDto } from './generate-invoice.dto';
 
-export default class GenerateInvoiceUseCase {
+export default class GenerateInvoiceUseCase implements UseCaseInterface {
   private _invoiceRepository: InvoiceGateway;
   private _calculateTotalService: CalculateTotalServiceInterface;
 

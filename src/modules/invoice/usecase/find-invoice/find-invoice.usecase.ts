@@ -1,8 +1,9 @@
+import UseCaseInterface from '../../../@shared/usecase/use-case.interface';
 import InvoiceGateway from '../../gateway/invoice.gateway';
 import { CalculateTotalServiceInterface } from '../../service/calculate-total/calculate-total.service.interface';
 import { FindInvoiceInputDTO, FindInvoiceOutputDTO } from './find-invoice.dto';
 
-export default class FindInvoiceUseCase {
+export default class FindInvoiceUseCase implements UseCaseInterface {
   private _invoiceRepository: InvoiceGateway;
   private _calculateTotalService: CalculateTotalServiceInterface;
 
