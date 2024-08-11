@@ -2,18 +2,11 @@ import { Sequelize } from 'sequelize-typescript';
 import InvoiceFacade from './invoice.facade';
 import { InvoiceModel } from '../repository/invoice.model';
 import InvoiceItemModel from '../repository/invoice-item.model';
-import InvoiceRepository from '../repository/invoice.repository';
-import GenerateInvoiceUseCase from '../usecase/generate-invoice/generate-invoice.usecase';
-import FindInvoiceUseCase from '../usecase/find-invoice/find-invoice.usecase';
-import CalculateTotalService from '../service/calculate-total/calculate-total.service';
 import { FindInvoiceFacadeOutputDto, GenerateInvoiceFacadeOutputDto } from './invoice.facade.interface';
+import InvoiceFacadeFactory from '../factory/facade.factory';
 
 describe(InvoiceFacade.name, () => {
   let sequelize: Sequelize;
-  let repository: InvoiceRepository;
-  let calculateTotalService: CalculateTotalService;
-  let generateInvoiceUseCase: GenerateInvoiceUseCase;
-  let findInvoiceUseCase: FindInvoiceUseCase;
   let invoiceFacade: InvoiceFacade;
 
   beforeEach(async () => {
@@ -24,16 +17,8 @@ describe(InvoiceFacade.name, () => {
       sync: { force: true },
     });
 
+    invoiceFacade = InvoiceFacadeFactory.create();
     sequelize.addModels([InvoiceModel, InvoiceItemModel]);
-    repository = new InvoiceRepository();
-    calculateTotalService = new CalculateTotalService();
-    generateInvoiceUseCase = new GenerateInvoiceUseCase(repository, calculateTotalService);
-    findInvoiceUseCase = new FindInvoiceUseCase(repository, calculateTotalService);
-    invoiceFacade = new InvoiceFacade({
-      generateInvoiceUseCase,
-      findInvoiceUseCase,
-    });
-
     await sequelize.sync();
   });
 
