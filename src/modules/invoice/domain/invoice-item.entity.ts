@@ -7,7 +7,6 @@ type InvoiceItemProps = {
     price: number;
 };
 
-// TODO: check if need invoice id
 export default class InvoiceItem extends BaseEntity {
     private _name: string;
     private _price: number;
