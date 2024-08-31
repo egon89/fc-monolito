@@ -5,23 +5,27 @@ import { InvoiceModel } from '../../modules/invoice/repository/invoice.model';
 import { ProductRegistrationModel } from '../../modules/product-adm/repository/product-registration.model';
 import ProductModel from '../../modules/store-catalog/repository/product.model';
 import TransactionModel from '../../modules/payment/repository/transaction.model';
+import OrderItemModel from '../../modules/checkout/repository/order-item.model';
+import OrderModel from '../../modules/checkout/repository/order.model';
 
 export let sequelize: Sequelize;
 
-async function setupDb() {
+export async function setupDb() {
   sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: ':memory:',
     logging: false,
   });
-  await sequelize.addModels([
+  sequelize.addModels([
     ClientModel,
     InvoiceItemModel,
     InvoiceModel,
+    OrderItemModel,
+    OrderModel,
     ProductModel,
     ProductRegistrationModel,
     TransactionModel,
   ]);
   await sequelize.sync();
+  console.log('Database is ready');
 }
-setupDb();
