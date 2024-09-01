@@ -39,7 +39,5 @@ type ClientProps = {
   
     get address(): Address {
       return this._address;
-    }
-  
+    }  
   }
-  

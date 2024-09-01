@@ -30,5 +30,4 @@ export default class ProductModel extends Model {
 
   @Column({ allowNull: true })
   updatedAt?: Date;
-  
 }
