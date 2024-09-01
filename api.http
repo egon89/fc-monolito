@@ -43,4 +43,5 @@ content-type: application/json
     ]
 }
 
-
+### get invoice by id
+GET http://localhost:3000/invoices/b1927b66-762d-4ba6-9c49-378131b51092 HTTP/1.1
