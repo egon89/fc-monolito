@@ -29,3 +29,18 @@ content-type: application/json
     "purchasePrice": 100.00,
     "stock": 10
 }
+
+### checkout
+POST http://localhost:3000/checkout HTTP/1.1
+content-type: application/json
+
+{
+    "clientId": "0d583f5f-547e-4816-a4e6-3e6c32727649",
+    "products": [
+        {
+            "productId": "e6c9cb26-d7a8-4fc8-a7c3-b852c6a00709"
+        }
+    ]
+}
+
+
