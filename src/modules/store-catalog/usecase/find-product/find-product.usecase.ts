@@ -5,7 +5,11 @@ export default class FindProductUseCase {
   constructor(private readonly productRepository: ProductGateway) {}
 
   async execute(input: FindProductInputDto): Promise<FindProductOutputDto> {
+    const x = await this.productRepository.findAll();
+    console.log('#store: findAll', x); // TODO: remove
+    console.log('#store: findProduct', input); // TODO: remove
     const product = await this.productRepository.find(input.id);
+    console.log('#store: product found', product); // TODO: remove
 
     return {
       id: product.id.id,

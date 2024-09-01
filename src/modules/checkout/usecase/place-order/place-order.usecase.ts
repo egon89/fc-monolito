@@ -37,16 +37,23 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
   }
 
   async execute(input: PlaceOrderInputDto): Promise<PlaceOrderOutputDto> {
+    console.log('#placeOrder', input); // TODO: remove
     const client = await this._clientFacade.find({ id: input.clientId });
     if (!client) {
       throw new Error('Client not found');
     }
 
+    console.log('#client found', client); // TODO: remove
+
     await this.validateProducts(input);
+
+    console.log('#product validate'); // TODO: remove
 
     const products = await Promise.all(
       input.products.map((product) => this.getProduct(product.productId))
     );
+
+    console.log('#got products'); // TODO: remove
 
     const myClient = new Client({
       id: new Id(client.id),
@@ -69,6 +76,8 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
       orderId: order.id.id,
       amount: order.total,
     })
+
+    console.log('#payment processed', payment); // TODO: remove
 
     const invoice = payment.status === 'approved' ?
       await this._invoiceFacade.generate({
@@ -94,6 +103,8 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
     payment.status === 'approved' && order.approved();
 
     this._repository.addOrder(order);
+
+    console.log('#order added to repository'); // TODO: remove
 
     return {
       id: order.id.id,
@@ -125,7 +136,9 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
   }
 
   private async getProduct(productId: string): Promise<Product> {
+    console.log('#getProduct', productId); // TODO: remove
     const product = await this._catalogFacade.find({ id: productId });
+    console.log('#product found', product); // TODO: remove
 
     if (!product) {
       throw new Error('Product not found');

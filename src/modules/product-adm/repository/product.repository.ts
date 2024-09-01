@@ -5,15 +5,21 @@ import { ProductRegistrationModel } from "./product-registration.model";
 
 export default class ProductRepository implements ProductGateway {
   async add(product: Product): Promise<void> {
-    await ProductRegistrationModel.create({
-      id: product.id.id,
-      name: product.name,
-      description: product.description,
-      purchasePrice: product.purchasePrice,
-      stock: product.stock,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+    console.log('ProductRepository.add', product); // TODO: remove
+    try {
+      await ProductRegistrationModel.create({
+        id: product.id.id,
+        name: product.name,
+        description: product.description,
+        purchasePrice: product.purchasePrice,
+        stock: product.stock,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    } catch (error) {
+      console.log('ProductRepository.add', error); // TODO: remove
+      throw new Error('Error adding product');
+    }
   }
   async find(id: string): Promise<Product> {
     const product = await ProductRegistrationModel.findOne({

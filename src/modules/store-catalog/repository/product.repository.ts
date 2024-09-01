@@ -18,11 +18,13 @@ export default class ProductRepository implements ProductGateway {
     );
   }
   async find(id: string): Promise<Product> {
+    console.log('#repository: findProduct', id); // TODO: remove
     const product = await ProductModel.findOne({
       where: {
         id: id,
       },
     });
+    console.log('#repository: findProduct 2', product); // TODO: remove
 
     return new Product({
       id: new Id(product.id),
