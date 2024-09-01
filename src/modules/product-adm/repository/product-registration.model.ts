@@ -16,6 +16,9 @@ export class ProductRegistrationModel extends Model {
   @Column({ allowNull: false })
   description: string;
 
+  @Column({ allowNull: true })
+  salesPrice?: number;
+
   @Column({ allowNull: false })
   purchasePrice: number;
 

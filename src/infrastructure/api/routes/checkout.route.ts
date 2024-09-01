@@ -12,14 +12,10 @@ checkoutRoute.post('/', async (req: Request, res: Response) => {
       clientId: req.body.clientId,
       products: req.body.products
     };
-
-    console.log('input', input); // TODO: remove
     const output = await checkoutFacade.placeOrder(input);
-    console.log('output', output); // TODO: remove
 
     res.status(201).send(output);
   } catch (error) {
-    console.log('error', error); // TODO: remove
     res.status(500).send(error);
   }
 });
