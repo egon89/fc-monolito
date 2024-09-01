@@ -1,0 +1,47 @@
+### create a client
+POST http://localhost:3000/clients HTTP/1.1
+content-type: application/json
+
+{
+    "id": "0d583f5f-547e-4816-a4e6-3e6c32727649",
+    "name": "John Doe",
+    "email": "john_doe@domain.com",
+    "document": "12345678901",
+    "address": {
+        "street": "Main Street",
+        "number": "123",
+        "complement": "Apartment 101",
+        "city": "Big City",
+        "state": "BC",
+        "country": "Brazil",
+        "zipCode": "12345-678"
+    }
+}
+
+### create a product
+POST http://localhost:3000/products HTTP/1.1
+content-type: application/json
+
+{
+    "id": "e6c9cb26-d7a8-4fc8-a7c3-b852c6a00709",
+    "name": "Product 1",
+    "description": "Product 1 description",
+    "purchasePrice": 100.00,
+    "stock": 10
+}
+
+### checkout
+POST http://localhost:3000/checkout HTTP/1.1
+content-type: application/json
+
+{
+    "clientId": "0d583f5f-547e-4816-a4e6-3e6c32727649",
+    "products": [
+        {
+            "productId": "e6c9cb26-d7a8-4fc8-a7c3-b852c6a00709"
+        }
+    ]
+}
+
+### get invoice by id
+GET http://localhost:3000/invoices/b1927b66-762d-4ba6-9c49-378131b51092 HTTP/1.1
